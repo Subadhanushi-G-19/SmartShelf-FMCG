@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - ExpireXpert</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .products-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .products-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .products-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 12px 16px 12px 44px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            width: 280px;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2rem;
+        }
+
+        .filter-select {
+            padding: 12px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: 8px;
+            background: var(--light);
+            padding: 4px;
+            border-radius: 10px;
+        }
+
+        .view-btn {
+            padding: 8px 16px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2rem;
+        }
+
+        .view-btn.active {
+            background: var(--white);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .products-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-mini {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stat-mini-info h4 {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-bottom: 4px;
+        }
+
+        .stat-mini-info .count {
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .stat-mini-icon {
+            font-size: 2rem;
+            opacity: 0.6;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 24px;
+        }
+
+        .product-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border-left: 5px solid;
+            position: relative;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .product-card.critical {
+            border-left-color: var(--danger);
+        }
+
+        .product-card.warning {
+            border-left-color: var(--warning);
+        }
+
+        .product-card.safe {
+            border-left-color: var(--success);
+        }
+
+        .product-card.expired {
+            border-left-color: var(--gray);
+            opacity: 0.8;
+        }
+
+        .product-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 16px;
+        }
+
+        .product-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 4px;
+        }
+
+        .product-category {
+            display: inline-block;
+            padding: 6px 12px;
+            background: var(--light);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--dark);
+            text-transform: capitalize;
+        }
+
+        .product-details {
+            margin: 16px 0;
+        }
+
+        .product-detail-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 0;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .detail-icon {
+            font-size: 1.1rem;
+        }
+
+        .detail-label {
+            color: var(--gray);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .days-remaining {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            margin: 12px 0;
+        }
+
+        .days-remaining.critical {
+            background: #fee;
+            color: var(--danger);
+        }
+
+        .days-remaining.warning {
+            background: #fef3e0;
+            color: var(--warning);
+        }
+
+        .days-remaining.safe {
+            background: #e8f5e9;
+            color: var(--success);
+        }
+
+        .days-remaining.expired {
+            background: #f5f5f5;
+            color: var(--gray);
+        }
+
+        .risk-score {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--light);
+            border-radius: 10px;
+            margin: 12px 0;
+        }
+
+        .risk-score-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .risk-score-value {
+            font-weight: 800;
+            font-size: 1.1rem;
+        }
+
+        .risk-bar {
+            flex: 1;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .risk-bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .btn-consume {
+            background: var(--success);
+            color: var(--white);
+        }
+
+        .btn-consume:hover {
+            background: #229954;
+            transform: translateY(-2px);
+        }
+
+        .btn-edit {
+            background: var(--info);
+            color: var(--white);
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: var(--white);
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+
+        .loading-spinner {
+            text-align: center;
+            padding: 60px;
+        }
+
+        .spinner {
+            border: 4px solid var(--light);
+            border-top: 4px solid var(--primary);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .products-container {
+                padding: 16px;
+            }
+
+            .products-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .products-controls {
+                width: 100%;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h2>ExpireXpert</h2>
+            </div>
+        </div>
+        
+        <div class="nav-center">
+            <a href="/dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/products.html" class="nav-link active">
+                <span class="nav-icon">📦</span>
+                <span>Products</span>
+            </a>
+            <a href="/analytics.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/notifications.html" class="nav-link">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                <span id="notifBadge" class="badge">0</span>
+            </a>
+        </div>
+        
+        <div class="nav-right">
+            <div class="user-menu">
+                <span id="currentUser" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="products-container">
+        <!-- Header -->
+        <div class="products-header">
+            <div>
+                <h1>📦 Product Inventory</h1>
+                <p style="color: var(--gray); margin-top: 8px;">Manage and track all your products</p>
+            </div>
+            <a href="/add-product.html" class="btn-primary">
+                <span>+ Add Product</span>
+            </a>
+        </div>
+
+        <!-- Controls -->
+        <div class="products-controls">
+            <div class="search-box">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search products...">
+            </div>
+
+            <select id="categoryFilter" class="filter-select">
+                <option value="all">All Categories</option>
+                <option value="food">🍕 Food</option>
+                <option value="medicine">💊 Medicine</option>
+                <option value="cosmetics">💄 Cosmetics</option>
+                <option value="household">🏠 Household</option>
+                <option value="other">📦 Other</option>
+            </select>
+
+            <select id="statusFilter" class="filter-select">
+                <option value="all">All Status</option>
+                <option value="critical">🚨 Critical</option>
+                <option value="warning">⚠️ Warning</option>
+                <option value="safe">✅ Safe</option>
+                <option value="expired">❌ Expired</option>
+            </select>
+
+            <select id="sortBy" class="filter-select">
+                <option value="expiry_asc">Expiry (Nearest)</option>
+                <option value="expiry_desc">Expiry (Farthest)</option>
+                <option value="risk_desc">Risk (Highest)</option>
+                <option value="risk_asc">Risk (Lowest)</option>
+                <option value="name_asc">Name (A-Z)</option>
+                <option value="name_desc">Name (Z-A)</option>
+            </select>
+        </div>
+
+        <!-- Mini Stats -->
+        <div class="products-stats">
+            <div class="stat-mini">
+                <div class="stat-mini-info">
+                    <h4>Total Products</h4>
+                    <div class="count" id="totalCount">0</div>
+                </div>
+                <div class="stat-mini-icon">📦</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-info">
+                    <h4>Critical</h4>
+                    <div class="count" style="color: var(--danger);" id="criticalCountMini">0</div>
+                </div>
+                <div class="stat-mini-icon">🚨</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-info">
+                    <h4>Warning</h4>
+                    <div class="count" style="color: var(--warning);" id="warningCountMini">0</div>
+                </div>
+                <div class="stat-mini-icon">⚠️</div>
+            </div>
+            <div class="stat-mini">
+                <div class="stat-mini-info">
+                    <h4>Safe</h4>
+                    <div class="count" style="color: var(--success);" id="safeCountMini">0</div>
+                </div>
+                <div class="stat-mini-icon">✅</div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loadingState" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+            <p style="margin-top: 20px; color: var(--gray);">Loading products...</p>
+        </div>
+
+        <!-- Products Grid -->
+        <div id="productsGrid" class="products-grid"></div>
+    </main>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/products.js"></script>
+</body>
+</html>

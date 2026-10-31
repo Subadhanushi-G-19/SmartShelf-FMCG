@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ExpireXpert</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="dashboard-body">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h2>ExpireXpert</h2>
+            </div>
+        </div>
+        
+        <div class="nav-center">
+            <a href="/dashboard.html" class="nav-link active">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/products.html" class="nav-link">
+                <span class="nav-icon">📦</span>
+                <span>Products</span>
+            </a>
+            <a href="/analytics.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/notifications.html" class="nav-link">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                <span id="notifBadge" class="badge">0</span>
+            </a>
+        </div>
+        
+        <div class="nav-right">
+            <div class="user-menu">
+                <span id="currentUser" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Header Section -->
+        <div class="page-header">
+            <div>
+                <h1>Dashboard Overview</h1>
+                <p class="page-subtitle">Monitor your inventory at a glance</p>
+            </div>
+            <a href="/add-product.html" class="btn-primary">
+                <span>+ Add Product</span>
+            </a>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+            <div class="stat-card critical">
+                <div class="stat-icon">🚨</div>
+                <div class="stat-content">
+                    <h3>Critical Items</h3>
+                    <div class="stat-value" id="criticalCount">0</div>
+                    <p>Expires in ≤3 days</p>
+                </div>
+            </div>
+
+            <div class="stat-card warning">
+                <div class="stat-icon">⚠️</div>
+                <div class="stat-content">
+                    <h3>Warning Items</h3>
+                    <div class="stat-value" id="warningCount">0</div>
+                    <p>Expires in 4-7 days</p>
+                </div>
+            </div>
+
+            <div class="stat-card safe">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <h3>Safe Items</h3>
+                    <div class="stat-value" id="safeCount">0</div>
+                    <p>Expires in >7 days</p>
+                </div>
+            </div>
+
+            <div class="stat-card expired">
+                <div class="stat-icon">❌</div>
+                <div class="stat-content">
+                    <h3>Expired Items</h3>
+                    <div class="stat-value" id="expiredCount">0</div>
+                    <p>Already expired</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Cards Grid -->
+        <div class="dashboard-grid">
+            <!-- Priority Items Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>⚠️ Priority Items</h3>
+                    <a href="/products.html?filter=critical" class="card-action">View All →</a>
+                </div>
+                <div class="card-body">
+                    <div id="priorityList" class="priority-list"></div>
+                </div>
+            </div>
+
+            <!-- Financial Impact Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>💰 Financial Impact</h3>
+                    <a href="/analytics.html" class="card-action">Details →</a>
+                </div>
+                <div class="card-body">
+                    <div id="financialSummary"></div>
+                </div>
+            </div>
+
+            <!-- Environmental Impact Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>🌍 Environmental Impact</h3>
+                    <a href="/analytics.html" class="card-action">Learn More →</a>
+                </div>
+                <div class="card-body">
+                    <div id="environmentalSummary"></div>
+                </div>
+            </div>
+
+            <!-- Smart Recommendations Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>💡 Smart Recommendations</h3>
+                </div>
+                <div class="card-body">
+                    <div id="recommendations"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="quick-actions">
+            <h3>Quick Actions</h3>
+            <div class="action-buttons">
+                <a href="/add-product.html" class="action-btn">
+                    <span class="action-icon">➕</span>
+                    <span>Add Product</span>
+                </a>
+                <a href="/products.html" class="action-btn">
+                    <span class="action-icon">📋</span>
+                    <span>View All Products</span>
+                </a>
+                <a href="/analytics.html" class="action-btn">
+                    <span class="action-icon">📊</span>
+                    <span>View Analytics</span>
+                </a>
+                <a href="/notifications.html" class="action-btn">
+                    <span class="action-icon">🔔</span>
+                    <span>Check Alerts</span>
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script src="/js/common.js"></script>
+    <script src="/js/dashboard.js"></script>
+</body>
+</html>

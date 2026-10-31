@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - ExpireXpert</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .notifications-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 32px;
+        }
+
+        .notifications-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .notifications-header h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .notifications-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            border: 2px solid #e5e7eb;
+            background: var(--white);
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+        }
+
+        .filter-btn.active {
+            background: var(--gradient-primary);
+            color: var(--white);
+            border-color: transparent;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .notifications-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .stat-box {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
+            text-align: center;
+        }
+
+        .stat-box .number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .stat-box.critical .number {
+            color: var(--danger);
+        }
+
+        .stat-box.high .number {
+            color: var(--warning);
+        }
+
+        .stat-box.medium .number {
+            color: var(--info);
+        }
+
+        .stat-box .label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .notifications-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .notification-card {
+            background: var(--white);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s;
+            border-left: 5px solid;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .notification-card:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .notification-card.unread {
+            background: #f8f9fa;
+            border-left-width: 6px;
+        }
+
+        .notification-card.critical {
+            border-left-color: var(--danger);
+        }
+
+        .notification-card.high {
+            border-left-color: var(--warning);
+        }
+
+        .notification-card.medium {
+            border-left-color: var(--info);
+        }
+
+        .notification-card.low {
+            border-left-color: var(--gray);
+        }
+
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 12px;
+        }
+
+        .notification-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--dark);
+            line-height: 1.4;
+        }
+
+        .notification-badge {
+            display: inline-block;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .badge-critical {
+            background: #fee;
+            color: var(--danger);
+        }
+
+        .badge-high {
+            background: #fef3e0;
+            color: var(--warning);
+        }
+
+        .badge-medium {
+            background: #e3f2fd;
+            color: var(--info);
+        }
+
+        .badge-low {
+            background: #f5f5f5;
+            color: var(--gray);
+        }
+
+        .notification-message {
+            color: var(--dark);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+
+        .notification-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .notification-time {
+            font-size: 0.85rem;
+            color: var(--gray);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .notification-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: var(--light);
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+
+        .action-icon:hover {
+            background: #e0e0e0;
+            transform: scale(1.1);
+        }
+
+        .unread-indicator {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .empty-state h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            color: var(--gray);
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .notifications-container {
+                padding: 16px;
+            }
+
+            .notifications-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .notification-card {
+                padding: 20px;
+            }
+
+            .notification-title {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h2>ExpireXpert</h2>
+            </div>
+        </div>
+        
+        <div class="nav-center">
+            <a href="/dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/products.html" class="nav-link">
+                <span class="nav-icon">📦</span>
+                <span>Products</span>
+            </a>
+            <a href="/analytics.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/notifications.html" class="nav-link active">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+            </a>
+        </div>
+        
+        <div class="nav-right">
+            <div class="user-menu">
+                <span id="currentUser" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="notifications-container">
+        <!-- Header -->
+        <div class="notifications-header">
+            <div>
+                <h1>🔔 Notifications</h1>
+                <p style="color: var(--gray); margin-top: 8px;">Stay updated on your product expiry alerts</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary btn-primary" onclick="markAllRead()">
+                    <span>✓ Mark All Read</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="notifications-stats">
+            <div class="stat-box critical">
+                <div class="number" id="criticalNotifs">0</div>
+                <div class="label">Critical Alerts</div>
+            </div>
+            <div class="stat-box high">
+                <div class="number" id="highNotifs">0</div>
+                <div class="label">High Priority</div>
+            </div>
+            <div class="stat-box medium">
+                <div class="number" id="mediumNotifs">0</div>
+                <div class="label">Medium Priority</div>
+            </div>
+            <div class="stat-box">
+                <div class="number" id="unreadNotifs">0</div>
+                <div class="label">Unread</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="notifications-filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="unread">Unread Only</button>
+            <button class="filter-btn" data-filter="critical">Critical</button>
+            <button class="filter-btn" data-filter="high">High Priority</button>
+            <button class="filter-btn" data-filter="medium">Medium Priority</button>
+        </div>
+
+        <!-- Notifications List -->
+        <div id="notificationsList" class="notifications-list"></div>
+    </main>
+
+    <script src="/js/common.js"></script>
+    <script>
+        const authToken = checkAuth();
+        if (!authToken) {
+            window.location.href = '/index.html';
+        }
+
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            document.getElementById('currentUser').textContent = currentUser.username;
+        }
+
+        let allNotifications = [];
+        let currentFilter = 'all';
+
+        // Load notifications
+        async function loadNotifications() {
+            try {
+                const response = await fetch(`${API_URL}/notifications`, {
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    allNotifications = data.notifications;
+                    updateStats();
+                    applyFilter();
+                }
+            } catch (error) {
+                console.error('Failed to load notifications:', error);
+                showToast('Failed to load notifications', 'error');
+            }
+        }
+
+        // Update stats
+        function updateStats() {
+            const critical = allNotifications.filter(n => n.priority === 'critical').length;
+            const high = allNotifications.filter(n => n.priority === 'high').length;
+            const medium = allNotifications.filter(n => n.priority === 'medium').length;
+            const unread = allNotifications.filter(n => !n.is_read).length;
+
+            document.getElementById('criticalNotifs').textContent = critical;
+            document.getElementById('highNotifs').textContent = high;
+            document.getElementById('mediumNotifs').textContent = medium;
+            document.getElementById('unreadNotifs').textContent = unread;
+        }
+
+        // Apply filter
+        function applyFilter() {
+            let filtered = allNotifications;
+
+            if (currentFilter === 'unread') {
+                filtered = allNotifications.filter(n => !n.is_read);
+            } else if (currentFilter !== 'all') {
+                filtered = allNotifications.filter(n => n.priority === currentFilter);
+            }
+
+            displayNotifications(filtered);
+        }
+
+        // Display notifications
+        function displayNotifications(notifications) {
+            const list = document.getElementById('notificationsList');
+
+            if (notifications.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">🔔</span>
+                        <h3>No notifications found</h3>
+                        <p>You're all caught up! Check back later for updates.</p>
+                        <a href="/products.html" class="btn-primary" style="display: inline-block; margin-top: 20px;">
+                            <span>View Products</span>
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = notifications.map(notif => `
+                <div class="notification-card ${notif.priority} ${!notif.is_read ? 'unread' : ''}" 
+                     onclick="markAsRead(${notif.id})">
+                    ${!notif.is_read ? '<div class="unread-indicator"></div>' : ''}
+                    
+                    <div class="notification-header">
+                        <div class="notification-title">${notif.title}</div>
+                        <span class="notification-badge badge-${notif.priority}">
+                            ${notif.priority}
+                        </span>
+                    </div>
+
+                    <div class="notification-message">${notif.message}</div>
+
+                    <div class="notification-footer">
+                        <div class="notification-time">
+                            <span>🕐</span>
+                            <span>${formatDateTime(notif.created_at)}</span>
+                        </div>
+                        <div class="notification-actions">
+                            ${notif.product_id ? `
+                            <button class="action-icon" onclick="event.stopPropagation(); viewProduct(${notif.product_id})" title="View Product">
+                                👁️
+                            </button>
+                            ` : ''}
+                            <button class="action-icon" onclick="event.stopPropagation(); deleteNotification(${notif.id})" title="Delete">
+                                🗑️
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Mark as read
+        async function markAsRead(notifId) {
+            try {
+                await fetch(`${API_URL}/notifications/${notifId}/read`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders()
+                });
+
+                loadNotifications();
+            } catch (error) {
+                console.error('Failed to mark notification as read:', error);
+            }
+        }
+
+        // Mark all read
+        async function markAllRead() {
+            try {
+                const response = await fetch(`${API_URL}/notifications/mark-all-read`, {
+                    method: 'PUT',
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('All notifications marked as read', 'success');
+                    loadNotifications();
+                }
+            } catch (error) {
+                showToast('Failed to mark all as read', 'error');
+            }
+        }
+
+        // Delete notification
+        async function deleteNotification(notifId) {
+            if (!confirm('Delete this notification?')) return;
+
+            try {
+                const response = await fetch(`${API_URL}/notifications/${notifId}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Notification deleted', 'success');
+                    loadNotifications();
+                }
+            } catch (error) {
+                showToast('Failed to delete notification', 'error');
+            }
+        }
+
+        // View product
+        function viewProduct(productId) {
+            window.location.href = `/products.html?id=${productId}`;
+        }
+
+        // Filter button handlers
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                applyFilter();
+            });
+        });
+
+        // Initialize
+        loadNotifications();
+
+        // Auto refresh every 30 seconds
+        setInterval(loadNotifications, 30000);
+    </script>
+</body>
+</html>

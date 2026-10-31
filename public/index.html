@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ExpireXpert - Login</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body class="auth-body">
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <div class="logo">
+                    <span class="logo-icon">🛡️</span>
+                    <h1>ExpireXpert</h1>
+                </div>
+                <p class="tagline">Smart Expiration Tracking with AI-Powered Insights</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="register">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <div class="form-group">
+                    <label>Username or Email</label>
+                    <input type="text" id="loginUsername" placeholder="Enter your username or email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password" required>
+                </div>
+                <div id="loginError" class="error-message"></div>
+                <button type="submit" class="btn-primary">
+                    <span>Login</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" class="auth-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" id="regUsername" placeholder="Choose a username" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="regEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="regPassword" placeholder="Create a strong password" required>
+                </div>
+                <div id="registerError" class="error-message"></div>
+                <button type="submit" class="btn-primary">
+                    <span>Create Account</span>
+                    <span class="btn-icon">→</span>
+                </button>
+            </form>
+
+            <div class="auth-footer">
+                <p>By continuing, you agree to ExpireXpert's Terms & Privacy Policy</p>
+            </div>
+        </div>
+
+        <div class="features-showcase">
+            <h2>Why ExpireXpert?</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <span class="feature-icon">🎯</span>
+                    <div>
+                        <h3>Smart Tracking</h3>
+                        <p>AI-powered expiry predictions based on storage conditions</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💰</span>
+                    <div>
+                        <h3>Save Money</h3>
+                        <p>Track waste and reduce unnecessary spending</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🌍</span>
+                    <div>
+                        <h3>Eco-Friendly</h3>
+                        <p>Reduce carbon footprint and food waste</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">🔔</span>
+                    <div>
+                        <h3>Smart Alerts</h3>
+                        <p>Get notified before products expire</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/auth.js"></script>
+</body>
+</html>

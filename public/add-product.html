@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - ExpireXpert</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        .add-product-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 24px;
+            min-height: calc(100vh - 80px);
+        }
+
+        .form-card {
+            background: var(--white);
+            border-radius: 20px;
+            padding: 48px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-header {
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .form-header h1 {
+            font-size: 2.5rem;
+            color: var(--dark);
+            margin-bottom: 12px;
+            font-weight: 800;
+        }
+
+        .form-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--dark);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--light);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--dark);
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px 18px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: inherit;
+            background: #fafafa;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: var(--white);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-group small {
+            margin-top: 6px;
+            color: var(--gray);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
+        .storage-info {
+            background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%);
+            padding: 24px;
+            border-radius: 12px;
+            margin-top: 24px;
+            border: 2px solid #bbdefb;
+        }
+
+        .storage-info h4 {
+            color: var(--info);
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .storage-info p {
+            font-size: 0.95rem;
+            color: var(--dark);
+            margin-bottom: 8px;
+            padding-left: 20px;
+            position: relative;
+        }
+
+        .storage-info p:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--info);
+            font-weight: bold;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 16px;
+            margin-top: 40px;
+            padding-top: 32px;
+            border-top: 2px solid var(--light);
+        }
+
+        .btn-secondary {
+            flex: 0 0 auto;
+            padding: 14px 32px;
+            background: #f3f4f6;
+            color: var(--dark);
+            border: 2px solid #e5e7eb;
+        }
+
+        .btn-secondary:hover {
+            background: #e5e7eb;
+            border-color: #d1d5db;
+        }
+
+        .form-actions .btn-primary {
+            flex: 1;
+        }
+
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+            color: #155724;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            border-left: 5px solid #28a745;
+            font-weight: 600;
+            font-size: 1.05rem;
+            animation: slideDown 0.4s ease-out;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .add-product-container {
+                padding: 20px 16px;
+            }
+
+            .form-card {
+                padding: 32px 24px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .form-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <div class="logo">
+                <span class="logo-icon">🛡️</span>
+                <h2>ExpireXpert</h2>
+            </div>
+        </div>
+        
+        <div class="nav-center">
+            <a href="/dashboard.html" class="nav-link">
+                <span class="nav-icon">📊</span>
+                <span>Dashboard</span>
+            </a>
+            <a href="/products.html" class="nav-link">
+                <span class="nav-icon">📦</span>
+                <span>Products</span>
+            </a>
+            <a href="/analytics.html" class="nav-link">
+                <span class="nav-icon">📈</span>
+                <span>Analytics</span>
+            </a>
+            <a href="/notifications.html" class="nav-link">
+                <span class="nav-icon">🔔</span>
+                <span>Notifications</span>
+                <span id="notifBadge" class="badge">0</span>
+            </a>
+        </div>
+        
+        <div class="nav-right">
+            <div class="user-menu">
+                <span id="currentUser" class="user-name"></span>
+                <button onclick="logout()" class="btn-logout">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="add-product-container">
+        <div class="form-card">
+            <div class="form-header">
+                <h1>➕ Add New Product</h1>
+                <p>Track your products and get smart expiry alerts</p>
+            </div>
+
+            <div id="successMessage" class="success-message">
+                ✅ Product added successfully! Redirecting...
+            </div>
+
+            <form id="addProductForm">
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <div class="form-section-title">📋 Basic Information</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Product Name *</label>
+                            <input type="text" id="productName" placeholder="e.g., Milk, Bread, Medicine" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Category *</label>
+                            <select id="productCategory" required>
+                                <option value="">Select Category</option>
+                                <option value="food">🍕 Food</option>
+                                <option value="medicine">💊 Medicine</option>
+                                <option value="cosmetics">💄 Cosmetics</option>
+                                <option value="household">🏠 Household</option>
+                                <option value="other">📦 Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Brand (Optional)</label>
+                            <input type="text" id="brand" placeholder="Product brand">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Barcode (Optional)</label>
+                            <input type="text" id="barcode" placeholder="Scan or enter barcode">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dates -->
+                <div class="form-section">
+                    <div class="form-section-title">📅 Important Dates</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Manufacturing Date *</label>
+                            <input type="date" id="mfgDate" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Expiry Date *</label>
+                            <input type="date" id="expiryDate" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date Opened (Optional)</label>
+                            <input type="date" id="dateOpened">
+                            <small>ℹ️ For opened products, shelf life may be reduced</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Storage & Quantity -->
+                <div class="form-section">
+                    <div class="form-section-title">📦 Storage & Quantity</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Storage Condition *</label>
+                            <select id="storageCondition" required>
+                                <option value="room_temperature">🌡️ Room Temperature</option>
+                                <option value="refrigerated">❄️ Refrigerated (2-8°C)</option>
+                                <option value="frozen">🧊 Frozen (-18°C)</option>
+                                <option value="hot_humid">🌡️ Hot/Humid</option>
+                                <option value="direct_sunlight">☀️ Direct Sunlight</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Storage Location (Optional)</label>
+                            <input type="text" id="storageLocation" placeholder="e.g., Kitchen Cabinet, Fridge">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Quantity *</label>
+                            <input type="number" id="quantity" value="1" min="1" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Unit *</label>
+                            <select id="unit" required>
+                                <option value="piece">Piece</option>
+                                <option value="kg">Kilogram (kg)</option>
+                                <option value="g">Gram (g)</option>
+                                <option value="l">Liter (L)</option>
+                                <option value="ml">Milliliter (ml)</option>
+                                <option value="pack">Pack</option>
+                                <option value="bottle">Bottle</option>
+                                <option value="box">Box</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="storage-info">
+                        <h4>💡 Storage Tips:</h4>
+                        <p><strong>Refrigerated:</strong> Extends shelf life by 50% for food items</p>
+                        <p><strong>Frozen:</strong> Extends shelf life by 200% for food items</p>
+                        <p><strong>Hot/Humid:</strong> Reduces shelf life by 30% - not recommended!</p>
+                    </div>
+                </div>
+
+                <!-- Additional Notes -->
+                <div class="form-section">
+                    <div class="form-section-title">📝 Additional Notes</div>
+                    
+                    <div class="form-group form-group-full">
+                        <label>Notes (Optional)</label>
+                        <textarea id="notes" rows="4" placeholder="Any special instructions or notes about this product..."></textarea>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <button type="button" class="btn-secondary btn-primary" onclick="window.location.href='/products.html'">
+                        <span>← Cancel</span>
+                    </button>
+                    <button type="submit" class="btn-primary" style="flex: 1;">
+                        <span>Add Product</span>
+                        <span class="btn-icon">✓</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <script src="/js/common.js"></script>
+    <script>
+        const authToken = checkAuth();
+        if (!authToken) {
+            window.location.href = '/index.html';
+        }
+
+        const currentUser = getCurrentUser();
+        if (currentUser) {
+            document.getElementById('currentUser').textContent = currentUser.username;
+        }
+
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('mfgDate').max = today;
+        document.getElementById('expiryDate').min = today;
+
+        document.getElementById('addProductForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            const originalContent = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span>Adding...</span>';
+
+            const formData = {
+                name: document.getElementById('productName').value,
+                category: document.getElementById('productCategory').value,
+                manufacturing_date: document.getElementById('mfgDate').value,
+                expiry_date: document.getElementById('expiryDate').value,
+                date_opened: document.getElementById('dateOpened').value || null,
+                storage_condition: document.getElementById('storageCondition').value,
+                storage_location: document.getElementById('storageLocation').value || null,
+                quantity: parseInt(document.getElementById('quantity').value),
+                unit: document.getElementById('unit').value,
+                brand: document.getElementById('brand').value || null,
+                barcode: document.getElementById('barcode').value || null,
+                notes: document.getElementById('notes').value || null
+            };
+
+            try {
+                const response = await fetch(`${API_URL}/products`, {
+                    method: 'POST',
+                    headers: getAuthHeaders(),
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    document.getElementById('successMessage').classList.add('show');
+                    submitBtn.innerHTML = '<span>✓ Added Successfully!</span>';
+
+                    setTimeout(() => {
+                        window.location.href = '/products.html';
+                    }, 1500);
+                } else {
+                    showToast(data.message || 'Failed to add product', 'error');
+                    submitBtn.disabled = false;
+                    submitBtn.innerHTML = originalContent;
+                }
+            } catch (error) {
+                showToast('Failed to add product. Please try again.', 'error');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalContent;
+            }
+        });
+
+        async function updateNotificationBadge() {
+            try {
+                const response = await fetch(`${API_URL}/notifications/unread-count`, {
+                    headers: getAuthHeaders()
+                });
+                const data = await response.json();
+                if (data.success && data.count > 0) {
+                    document.getElementById('notifBadge').textContent = data.count;
+                    document.getElementById('notifBadge').style.display = 'inline-block';
+                }
+            } catch (error) {
+                console.error('Failed to load notification count:', error);
+            }
+        }
+
+        updateNotificationBadge();
+    </script>
+</body>
+</html>
